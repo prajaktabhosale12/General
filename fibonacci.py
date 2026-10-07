@@ -1,11 +1,12 @@
+import sys
+
+
 def fibonacci(n):
-    """Return a list of the first n Fibonacci numbers."""
-    series = []
+    """Yield the first n Fibonacci numbers lazily, using O(1) memory."""
     a, b = 0, 1
     for _ in range(n):
-        series.append(a)
+        yield a
         a, b = b, a + b
-    return series
 
 
 def main():
@@ -19,7 +20,17 @@ def main():
         print("Please enter a positive integer.")
         return
 
-    print("Fibonacci series:", " ".join(str(x) for x in fibonacci(n)))
+    # Python 3.11+ caps int-to-str conversion at 4300 digits; large terms exceed it.
+    if hasattr(sys, "set_int_max_str_digits"):
+        sys.set_int_max_str_digits(0)
+
+    # Stream each term to stdout instead of building the whole series in memory.
+    write = sys.stdout.write
+    write("Fibonacci series:")
+    for x in fibonacci(n):
+        write(" ")
+        write(str(x))
+    write("\n")
 
 
 if __name__ == "__main__":
