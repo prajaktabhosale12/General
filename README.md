@@ -1,4 +1,5 @@
 # General
+
 ## Idea → Web App prompt
 
 Run `/idea <your idea>` in Claude Code from this repo, for example:
